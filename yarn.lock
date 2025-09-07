@@ -484,6 +484,11 @@ he@^1.2.0:
   resolved "https://registry.npmmirror.com/he/-/he-1.2.0.tgz#84ae65fa7eafb165fddb61566ae14baf05664f0f"
   integrity sha512-F/1DnUGPopORZi0ni+CvrCgHQ5FyEAHRLSApuYWMmrbSwoN2Mn/7k+Gl38gJnR7yyDZk6WLXwiGod1JOWNDKGw==
 
+konva@^10.0.0:
+  version "10.0.0"
+  resolved "https://registry.npmmirror.com/konva/-/konva-10.0.0.tgz#f0a9238d959676ef355f57fce8280b16153fdde9"
+  integrity sha512-BlwOR6avOq6AQOOU6ZYWnAewxx0l1e3anD3ZCVcrf3EdETRzGdCd6d1WGx0CZBZNy/usqwqDmh7J5k1RWROQTg==
+
 magic-string@^0.30.18:
   version "0.30.18"
   resolved "https://registry.npmmirror.com/magic-string/-/magic-string-0.30.18.tgz#905bfbbc6aa5692703a93db26a9edcaa0007d2bb"
@@ -591,6 +596,11 @@ vscode-uri@^3.0.8:
   version "3.1.0"
   resolved "https://registry.npmmirror.com/vscode-uri/-/vscode-uri-3.1.0.tgz#dd09ec5a66a38b5c3fffc774015713496d14e09c"
   integrity sha512-/BpdSx+yCQGnCvecbyXdxHDkuk55/G3xwnC0GqY4gmQ3j+A+g8kzzgB4Nk/SINjqn6+waqw3EgbVF2QKExkRxQ==
+
+vue-konva@^3.2.6:
+  version "3.2.6"
+  resolved "https://registry.npmmirror.com/vue-konva/-/vue-konva-3.2.6.tgz#918487e3cd94ab9ee52eba8d03e2be8eece7165d"
+  integrity sha512-QtiM/BYHs4gyRqhg6w0lHYGONb936qD5PeGpSFFnFzTLcOaHXd3EAas2PafrWbcILdHAUNm+0j7+djJw6g6XCw==
 
 vue-tsc@^3.0.5:
   version "3.0.6"
