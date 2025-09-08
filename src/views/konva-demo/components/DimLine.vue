@@ -131,7 +131,7 @@ const inputConfig = computed(() => ({
   width: textWidth.value,
   text: editText.value,
   offsetX: textWidth.value / 2,
-  offsetY: 30,
+  offsetY: 7 / props.scale,
   lineHeight: 1.2,
   scaleY: -1,
   fontSize: 14 / props.scale,

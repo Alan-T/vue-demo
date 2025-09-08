@@ -15,9 +15,8 @@
         <DimLine
           :startX="100"
           :startY="300"
-          :length="200"
+          :length="dimLength"
           :rotation="0"
-          :textRotation="0"
           :offsetY="0"
           :scale="scale"
           :editable="true"
@@ -86,6 +85,8 @@ const mouseInfoConfig = computed(() => ({
   scaleY: -1,
   fill: "black",
 }));
+
+const dimLength = ref(200);
 
 const rectConfig = computed(() => ({
   x: 100,
