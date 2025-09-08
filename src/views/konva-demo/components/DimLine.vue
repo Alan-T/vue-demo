@@ -34,12 +34,11 @@
 import { computed, ref, nextTick } from "vue";
 
 const props = defineProps({
-  startX: { type: Number, required: true },
-  startY: { type: Number, required: true },
-  length: { type: Number, required: true },
+  startX: { type: Number, required: true, default: 0 },
+  startY: { type: Number, required: true, default: 0 },
+  modelValue: { type: Number, required: true, default: 100 },
   rotation: { type: Number, default: 0 },
   textRotation: { type: Number, default: 0 },
-  text: { type: String, default: "" },
   offsetX: { type: Number, default: 0 },
   offsetY: { type: Number, default: 0 },
   textColor: { type: String, default: "#0958d9" },
@@ -50,8 +49,7 @@ const props = defineProps({
 });
 
 const emit = defineEmits<{
-  (e: "textChange", value: string): void;
-  (e: "update:text", value: string): void;
+  (e: "update:modelValue", value: string): void;
 }>();
 
 const isEditing = ref(false);
@@ -59,7 +57,7 @@ const editText = ref("");
 const inputRef = ref<any>(null);
 const leaveEdit = ref(false);
 
-const displayText = computed(() => props.text || props.length.toString());
+const displayText = computed(() => props.modelValue.toString());
 
 // 计算文字宽度 (估算)
 const textWidth = computed(() => (displayText.value.length * 12) / props.scale);
@@ -67,7 +65,7 @@ const textGap = computed(() =>
   Math.max(textWidth.value + 10 / props.scale, 20 / props.scale)
 ); // 文字区域 + 间隙
 
-const centerX = computed(() => props.length / 2);
+const centerX = computed(() => props.modelValue / 2);
 const leftLineEnd = computed(() => centerX.value - textGap.value / 2);
 const rightLineStart = computed(() => centerX.value + textGap.value / 2);
 const groupConfig = computed(() => ({
@@ -87,7 +85,12 @@ const mainLineLeftConfig = computed(() => ({
 
 // 主标注线 - 右段
 const mainLineRightConfig = computed(() => ({
-  points: [Math.min(rightLineStart.value, props.length), -0, props.length, -0],
+  points: [
+    Math.min(rightLineStart.value, props.modelValue),
+    -0,
+    props.modelValue,
+    -0,
+  ],
   stroke: props.lineColor,
   strokeWidth: 1 / props.scale,
 }));
@@ -100,7 +103,12 @@ const extensionLine1Config = computed(() => ({
 }));
 
 const extensionLine2Config = computed(() => ({
-  points: [props.length, 6 / props.scale, props.length, -6 / props.scale],
+  points: [
+    props.modelValue,
+    6 / props.scale,
+    props.modelValue,
+    -6 / props.scale,
+  ],
   stroke: props.lineColor,
   strokeWidth: 1 / props.scale,
 }));
@@ -113,7 +121,7 @@ const textConfig = computed(() => ({
   text: displayText.value,
   offsetX: textWidth.value / 2,
   offsetY: 6 / props.scale,
-  lineHeight: 1.2,
+  lineHeight: 1,
   scaleY: -1,
   fontSize: 12 / props.scale,
   fill: props.editable ? props.textColor : "#434343",
@@ -132,7 +140,7 @@ const inputConfig = computed(() => ({
   text: editText.value,
   offsetX: textWidth.value / 2,
   offsetY: 7 / props.scale,
-  lineHeight: 1.2,
+  lineHeight: 1,
   scaleY: -1,
   fontSize: 14 / props.scale,
   fill: "#ff0000",
@@ -223,8 +231,7 @@ const finishEditing = () => {
     editText.value = props.minLength.toString();
   }
   if (editText.value !== displayText.value && editText.value.trim() !== "") {
-    emit("textChange", editText.value);
-    emit("update:text", editText.value);
+    emit("update:modelValue", editText.value);
   }
   isEditing.value = false;
 };

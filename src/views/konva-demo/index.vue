@@ -15,7 +15,7 @@
         <DimLine
           :startX="100"
           :startY="300"
-          :length="dimLength"
+          v-model="dimLength"
           :rotation="0"
           :offsetY="0"
           :scale="scale"
