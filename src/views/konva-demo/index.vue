@@ -1,7 +1,13 @@
 <template>
   <div class="konva-demo" ref="konvaViewRef" v-resize="handleResize">
     <!-- 舞台 -->
-    <v-stage :config="stageConfig" @mousemove="handleMouseMove">
+    <v-stage
+      :config="stageConfig"
+      @mousemove="handleMouseMove"
+      @mousedown="handleMouseDown"
+      @mouseup="handleMouseUp"
+      @mouseleave="handleMouseLeave"
+    >
       <v-layer>
         <!-- 鼠标坐标显示 -->
         <v-text :config="mouseInfoConfig"></v-text>
@@ -49,6 +55,10 @@ const origin = reactive({
   x: 40,
   y: 40,
 });
+// 添加拖拽相关状态
+const isDragging = ref(false);
+const lastPointerPosition = ref({ x: 0, y: 0 });
+
 const mouseText = ref("X:--.Y:--");
 const stageConfig = computed(() => ({
   width: stageSize.width,
@@ -111,9 +121,58 @@ const handleResize = (data: ResizeData) => {
 const handleMouseMove = (e: any) => {
   const stageNode = e.target.getStage();
   const pos = stageNode.getPointerPosition();
+
+  // 更新鼠标坐标显示
   mouseText.value = `X: ${pos.x / scale.value - origin.x}, Y: ${
     -pos.y / scale.value - origin.y + stageSize.height / scale.value
   }`;
+
+  // 处理中键拖拽
+  if (isDragging.value) {
+    const dx = pos.x - lastPointerPosition.value.x;
+    const dy = pos.y - lastPointerPosition.value.y;
+
+    // 更新原点位置（注意Y轴方向）
+    origin.x += dx / scale.value;
+    origin.y -= dy / scale.value;
+
+    lastPointerPosition.value = pos;
+  }
+};
+
+const handleMouseDown = (e: any) => {
+  // 检查是否为中键点击
+  if (e.evt.button === 1) {
+    e.evt.preventDefault();
+    isDragging.value = true;
+    const stageNode = e.target.getStage();
+    const pos = stageNode.getPointerPosition();
+    lastPointerPosition.value = pos;
+
+    // 改变鼠标样式
+    if (konvaViewRef.value) {
+      e.target.getStage().container().style.cursor = "grabbing";
+    }
+  }
+};
+
+const handleMouseUp = (e: any) => {
+  // 检查是否为中键释放
+  if (e.evt.button === 1) {
+    isDragging.value = false;
+
+    // 恢复鼠标样式
+    if (konvaViewRef.value) {
+      e.target.getStage().container().style.cursor = "default";
+    }
+  }
+};
+const handleMouseLeave = (e: any) => {
+  // 鼠标离开画布时停止拖拽
+  isDragging.value = false;
+  if (konvaViewRef.value) {
+    e.target.getStage().container().style.cursor = "default";
+  }
 };
 </script>
 <style scoped>
