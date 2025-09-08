@@ -46,10 +46,11 @@ const props = defineProps({
   scale: { type: Number, default: 1 },
   editable: { type: Boolean, default: false },
   minLength: { type: Number, default: 20 },
+  maxLength: { type: Number, default: 10000 },
 });
 
 const emit = defineEmits<{
-  (e: "update:modelValue", value: string): void;
+  (e: "update:modelValue", value: number): void;
 }>();
 
 const isEditing = ref(false);
@@ -230,8 +231,12 @@ const finishEditing = () => {
   if (Number(editText.value) < props.minLength) {
     editText.value = props.minLength.toString();
   }
+  // 最大值限制
+  if (Number(editText.value) > props.maxLength) {
+    editText.value = props.maxLength.toString();
+  }
   if (editText.value !== displayText.value && editText.value.trim() !== "") {
-    emit("update:modelValue", editText.value);
+    emit("update:modelValue", Number(editText.value));
   }
   isEditing.value = false;
 };
