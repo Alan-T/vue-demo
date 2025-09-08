@@ -17,7 +17,6 @@
         <v-text :config="labelConfig" />
       </v-layer>
       <v-layer>
-        <v-rect :config="rectConfig"></v-rect>
         <DimLine
           :startX="100"
           :startY="300"
@@ -28,8 +27,8 @@
           :editable="true"
         />
         <DimAngle
-          :x="300"
-          :y="200"
+          :x="400"
+          :y="100"
           :scale="scale"
           :startAngle="0"
           :angle="30"
@@ -50,10 +49,10 @@ const stageSize = reactive({
   width: 1000,
   height: 600,
 });
-const scale = ref(0.8);
+const scale = ref(0.5);
 const origin = reactive({
-  x: 40,
-  y: 40,
+  x: 400,
+  y: 400,
 });
 // 添加拖拽相关状态
 const isDragging = ref(false);
@@ -74,8 +73,6 @@ const originDotConfig = computed(() => ({
   y: 0,
   radius: 2 / scale.value,
   fill: "#002766",
-  stroke: "#002766",
-  strokeWidth: 2,
 }));
 const labelConfig = computed(() => ({
   x: 0,
@@ -96,17 +93,7 @@ const mouseInfoConfig = computed(() => ({
   fill: "black",
 }));
 
-const dimLength = ref(200);
-
-const rectConfig = computed(() => ({
-  x: 100,
-  y: 100,
-  width: 200,
-  height: 100,
-  fill: "red",
-  stroke: "black",
-  strokeWidth: 1,
-}));
+const dimLength = ref(400);
 
 onMounted(() => {
   if (konvaViewRef.value) {
@@ -139,7 +126,6 @@ const handleMouseMove = (e: any) => {
     lastPointerPosition.value = pos;
   }
 };
-
 const handleMouseDown = (e: any) => {
   // 检查是否为中键点击
   if (e.evt.button === 1) {
@@ -155,7 +141,6 @@ const handleMouseDown = (e: any) => {
     }
   }
 };
-
 const handleMouseUp = (e: any) => {
   // 检查是否为中键释放
   if (e.evt.button === 1) {
