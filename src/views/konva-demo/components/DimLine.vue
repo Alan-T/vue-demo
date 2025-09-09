@@ -61,9 +61,9 @@ const leaveEdit = ref(false);
 const displayText = computed(() => props.modelValue.toString());
 
 // 计算文字宽度 (估算)
-const textWidth = computed(() => (displayText.value.length * 12) / props.scale);
+const textWidth = computed(() => (displayText.value.length * 8) / props.scale);
 const textGap = computed(() =>
-  Math.max(textWidth.value + 2 / props.scale, 20 / props.scale)
+  Math.max(textWidth.value + 12 / props.scale, 20 / props.scale)
 ); // 文字区域 + 间隙
 
 const centerX = computed(() => props.modelValue / 2);
