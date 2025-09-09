@@ -61,9 +61,9 @@ const leaveEdit = ref(false);
 const displayText = computed(() => props.modelValue.toString());
 
 // 计算文字宽度 (估算)
-const textWidth = computed(() => (displayText.value.length * 8) / props.scale);
+const textWidth = computed(() => displayText.value.length * 8 * props.scale);
 const textGap = computed(() =>
-  Math.max(textWidth.value + 12 / props.scale, 20 / props.scale)
+  Math.max(textWidth.value + 12 * props.scale, 20 * props.scale)
 ); // 文字区域 + 间隙
 
 const centerX = computed(() => props.modelValue / 2);
@@ -81,7 +81,7 @@ const groupConfig = computed(() => ({
 const mainLineLeftConfig = computed(() => ({
   points: [0, -0, Math.max(leftLineEnd.value, 0), -0],
   stroke: props.lineColor,
-  strokeWidth: 1 / props.scale,
+  strokeWidth: 1 * props.scale,
 }));
 
 // 主标注线 - 右段
@@ -93,25 +93,25 @@ const mainLineRightConfig = computed(() => ({
     -0,
   ],
   stroke: props.lineColor,
-  strokeWidth: 1 / props.scale,
+  strokeWidth: 1 * props.scale,
 }));
 
 // 引线
 const extensionLine1Config = computed(() => ({
-  points: [0, 6 / props.scale, 0, -0 - 6 / props.scale],
+  points: [0, 6 * props.scale, 0, -0 - 6 * props.scale],
   stroke: props.lineColor,
-  strokeWidth: 1 / props.scale,
+  strokeWidth: 1 * props.scale,
 }));
 
 const extensionLine2Config = computed(() => ({
   points: [
     props.modelValue,
-    6 / props.scale,
+    6 * props.scale,
     props.modelValue,
-    -6 / props.scale,
+    -6 * props.scale,
   ],
   stroke: props.lineColor,
-  strokeWidth: 1 / props.scale,
+  strokeWidth: 1 * props.scale,
 }));
 
 // 文字
@@ -121,10 +121,10 @@ const textConfig = computed(() => ({
   width: textWidth.value,
   text: displayText.value,
   offsetX: textWidth.value / 2,
-  offsetY: 6 / props.scale,
+  offsetY: 6 * props.scale,
   lineHeight: 1,
   scaleY: -1,
-  fontSize: 12 / props.scale,
+  fontSize: 12 * props.scale,
   fill: props.editable ? props.textColor : "#434343",
   align: "center",
   verticalAlign: "middle",
@@ -140,10 +140,10 @@ const inputConfig = computed(() => ({
   width: textWidth.value,
   text: editText.value,
   offsetX: textWidth.value / 2,
-  offsetY: 7 / props.scale,
+  offsetY: 7 * props.scale,
   lineHeight: 1,
   scaleY: -1,
-  fontSize: 14 / props.scale,
+  fontSize: 14 * props.scale,
   fill: "#ff0000",
   align: "center",
   verticalAlign: "middle",

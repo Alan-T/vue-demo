@@ -14,15 +14,15 @@
       :config="{
         fill: '#262626',
         pointerDirection: 'down',
-        pointerWidth: 10 / props.scale,
-        pointerHeight: 6 / props.scale,
-        cornerRadius: 2 / props.scale,
+        pointerWidth: 10 * props.scale,
+        pointerHeight: 6 * props.scale,
+        cornerRadius: 2 * props.scale,
         opacity: 1,
         lineJoin: 'round',
         shadowColor: 'black',
-        shadowBlur: 10 / props.scale,
-        shadowOffsetX: 10 / props.scale,
-        shadowOffsetY: 10 / props.scale,
+        shadowBlur: 10 * props.scale,
+        shadowOffsetX: 10 * props.scale,
+        shadowOffsetY: 10 * props.scale,
         shadowOpacity: 0.5,
       }"
     />
@@ -30,8 +30,8 @@
       :config="{
         text: text,
         fontFamily: 'Arial',
-        fontSize: 12 / props.scale,
-        padding: 8 / props.scale,
+        fontSize: 12 * props.scale,
+        padding: 8 * props.scale,
         fill: 'white',
       }"
     />

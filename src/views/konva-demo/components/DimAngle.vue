@@ -14,16 +14,25 @@
   </v-group>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { computed } from "vue";
 
-const props = defineProps({
-  x: { type: Number, default: 0 },
-  y: { type: Number, default: 0 },
-  scale: { type: Number, default: 1 },
-  startAngle: { type: Number, default: 0 },
-  angle: { type: Number, default: 30 },
-  lineLength: { type: Number, default: 68 },
+interface Props {
+  x?: number;
+  y?: number;
+  scale?: number;
+  startAngle?: number;
+  angle?: number;
+  lineLength?: number;
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  x: 0,
+  y: 0,
+  scale: 1,
+  startAngle: 0,
+  angle: 30,
+  lineLength: 68,
 });
 
 const groupConfig = computed(() => ({
@@ -32,8 +41,8 @@ const groupConfig = computed(() => ({
   offsetX: 0,
   offsetY: 0,
   rotation: props.startAngle,
-  scaleX: 1 / props.scale,
-  scaleY: 1 / props.scale,
+  scaleX: 1 * props.scale,
+  scaleY: 1 * props.scale,
 }));
 
 // 第一条线配置

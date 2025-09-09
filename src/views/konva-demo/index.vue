@@ -44,10 +44,16 @@
           v-model="dimLength"
           :rotation="0"
           :offsetY="0"
-          :scale="scale"
+          :scale="1 / scale"
           :editable="true"
         />
-        <DimAngle :x="400" :y="0" :scale="scale" :startAngle="0" :angle="30" />
+        <DimAngle
+          :x="400"
+          :y="0"
+          :scale="1 / scale"
+          :startAngle="0"
+          :angle="30"
+        />
         <Tooltip
           :x="0"
           :y="530"
@@ -56,7 +62,7 @@
           :text="`长度: ${dimLength}`"
           placement="bottom"
           :rotation="0"
-          :scale="scale"
+          :scale="1 / scale"
           :visible="true"
         />
         <DimLine
@@ -65,7 +71,7 @@
           v-model="circleRadius"
           :rotation="0"
           :offsetY="0"
-          :scale="scale"
+          :scale="1 / scale"
           :editable="true"
         />
       </v-layer>
