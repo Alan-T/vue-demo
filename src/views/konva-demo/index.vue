@@ -23,16 +23,16 @@
           :config="{
             x: 100,
             y: 300,
-            width: 400,
+            width: dimLength,
             height: 200,
             fill: '#d48806',
           }"
         ></v-rect>
         <v-circle
           :config="{
-            x: 700,
+            x: 800,
             y: 400,
-            radius: 100,
+            radius: circleRadius,
             fill: '#ff7a45',
           }"
         ></v-circle>
@@ -60,7 +60,7 @@
           :visible="true"
         />
         <DimLine
-          :startX="700"
+          :startX="800"
           :startY="400"
           v-model="circleRadius"
           :rotation="0"
