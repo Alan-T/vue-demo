@@ -54,6 +54,14 @@
           :startAngle="0"
           :angle="30"
         />
+        <DimLine
+          :startX="800"
+          :startY="0"
+          :modelValue="100"
+          :rotation="0"
+          :offsetY="0"
+          :scale="1 / scale"
+        />
         <Tooltip
           :x="0"
           :y="530"
@@ -140,7 +148,7 @@ const mouseInfoConfig = computed(() => ({
   fill: "black",
 }));
 
-const dimLength = ref(400);
+const dimLength = ref(200);
 const circleRadius = ref(100);
 
 onMounted(() => {

@@ -33,20 +33,36 @@
 <script setup lang="ts">
 import { computed, ref, nextTick } from "vue";
 
-const props = defineProps({
-  startX: { type: Number, required: true, default: 0 },
-  startY: { type: Number, required: true, default: 0 },
-  modelValue: { type: Number, required: true, default: 100 },
-  rotation: { type: Number, default: 0 },
-  textRotation: { type: Number, default: 0 },
-  offsetX: { type: Number, default: 0 },
-  offsetY: { type: Number, default: 0 },
-  textColor: { type: String, default: "#0958d9" },
-  lineColor: { type: String, default: "#389e0d" },
-  scale: { type: Number, default: 1 },
-  editable: { type: Boolean, default: false },
-  minLength: { type: Number, default: 20 },
-  maxLength: { type: Number, default: 10000 },
+interface Props {
+  startX: number;
+  startY: number;
+  modelValue: number;
+  rotation?: number;
+  textRotation?: number;
+  offsetX?: number;
+  offsetY?: number;
+  textColor?: string;
+  lineColor?: string;
+  scale?: number;
+  editable?: boolean;
+  minLength?: number;
+  maxLength?: number;
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  startX: 0,
+  startY: 0,
+  modelValue: 100,
+  rotation: 0,
+  textRotation: 0,
+  offsetX: 0,
+  offsetY: 0,
+  textColor: "#0958d9",
+  lineColor: "#389e0d",
+  scale: 1,
+  editable: false,
+  minLength: 20,
+  maxLength: 10000,
 });
 
 const emit = defineEmits<{
@@ -73,7 +89,7 @@ const groupConfig = computed(() => ({
   x: props.startX,
   y: props.startY,
   rotation: props.rotation,
-  offsetY: -2 - props.offsetY,
+  offsetY: -props.offsetY,
   offsetX: -props.offsetX,
 }));
 

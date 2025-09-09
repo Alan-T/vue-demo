@@ -20,9 +20,9 @@
         opacity: 1,
         lineJoin: 'round',
         shadowColor: 'black',
-        shadowBlur: 10 * props.scale,
-        shadowOffsetX: 10 * props.scale,
-        shadowOffsetY: 10 * props.scale,
+        shadowBlur: 6 * props.scale,
+        shadowOffsetX: 6 * props.scale,
+        shadowOffsetY: 6 * props.scale,
         shadowOpacity: 0.5,
       }"
     />

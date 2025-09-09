@@ -41,8 +41,7 @@ const groupConfig = computed(() => ({
   offsetX: 0,
   offsetY: 0,
   rotation: props.startAngle,
-  scaleX: 1 * props.scale,
-  scaleY: 1 * props.scale,
+  scale: 1 * props.scale,
 }));
 
 // 第一条线配置
