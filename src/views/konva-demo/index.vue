@@ -50,9 +50,9 @@
         <DimAngle
           :x="400"
           :y="0"
-          :scale="1 / scale"
           :startAngle="0"
           :angle="30"
+          :scale="1 / scale"
         />
         <DimLine
           :startX="800"
