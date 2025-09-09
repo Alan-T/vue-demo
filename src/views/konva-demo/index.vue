@@ -7,6 +7,7 @@
       @mousedown="handleMouseDown"
       @mouseup="handleMouseUp"
       @mouseleave="handleMouseLeave"
+      @wheel="handleWheel"
     >
       <v-layer>
         <!-- 鼠标坐标显示 -->
@@ -17,25 +18,39 @@
         <v-text :config="labelConfig" />
       </v-layer>
       <v-layer>
+        <!-- 其他图形元素可以放在这里 -->
+        <v-rect
+          :config="{
+            x: 100,
+            y: 300,
+            width: 400,
+            height: 200,
+            fill: '#d48806',
+          }"
+        ></v-rect>
+        <v-circle
+          :config="{
+            x: 700,
+            y: 400,
+            radius: 100,
+            fill: '#ff7a45',
+          }"
+        ></v-circle>
+      </v-layer>
+      <v-layer>
         <DimLine
           :startX="100"
-          :startY="300"
+          :startY="530"
           v-model="dimLength"
           :rotation="0"
           :offsetY="0"
           :scale="scale"
           :editable="true"
         />
-        <DimAngle
-          :x="400"
-          :y="100"
-          :scale="scale"
-          :startAngle="0"
-          :angle="30"
-        />
+        <DimAngle :x="400" :y="0" :scale="scale" :startAngle="0" :angle="30" />
         <Tooltip
           :x="0"
-          :y="300"
+          :y="530"
           :offsetX="dimLength / 2 + 100"
           :offsetY="30"
           :text="`长度: ${dimLength}`"
@@ -43,6 +58,15 @@
           :rotation="0"
           :scale="scale"
           :visible="true"
+        />
+        <DimLine
+          :startX="700"
+          :startY="400"
+          v-model="circleRadius"
+          :rotation="0"
+          :offsetY="0"
+          :scale="scale"
+          :editable="true"
         />
       </v-layer>
     </v-stage>
@@ -69,6 +93,11 @@ const origin = reactive({
 // 添加拖拽相关状态
 const isDragging = ref(false);
 const lastPointerPosition = ref({ x: 0, y: 0 });
+
+// 缩放相关配置
+const minScale = 0.1;
+const maxScale = 5;
+const scaleStep = 0.1;
 
 const mouseText = ref("X:--.Y:--");
 const stageConfig = computed(() => ({
@@ -106,6 +135,7 @@ const mouseInfoConfig = computed(() => ({
 }));
 
 const dimLength = ref(400);
+const circleRadius = ref(100);
 
 onMounted(() => {
   if (konvaViewRef.value) {
@@ -113,17 +143,23 @@ onMounted(() => {
     stageSize.height = konvaViewRef.value.getBoundingClientRect().height || 600;
   }
 });
+
 const handleResize = (data: ResizeData) => {
   stageSize.width = data.width || 1000;
   stageSize.height = data.height || 800;
 };
+
 const handleMouseMove = (e: any) => {
   const stageNode = e.target.getStage();
   const pos = stageNode.getPointerPosition();
 
   // 更新鼠标坐标显示
-  mouseText.value = `X: ${pos.x / scale.value - origin.x}, Y: ${
-    -pos.y / scale.value - origin.y + stageSize.height / scale.value
+  mouseText.value = `X: ${
+    Math.round((pos.x / scale.value - origin.x) * 100) / 100
+  }, Y: ${
+    Math.round(
+      (-pos.y / scale.value - origin.y + stageSize.height / scale.value) * 100
+    ) / 100
   }`;
 
   // 处理中键拖拽
@@ -138,6 +174,7 @@ const handleMouseMove = (e: any) => {
     lastPointerPosition.value = pos;
   }
 };
+
 const handleMouseDown = (e: any) => {
   // 检查是否为中键点击
   if (e.evt.button === 1) {
@@ -153,6 +190,7 @@ const handleMouseDown = (e: any) => {
     }
   }
 };
+
 const handleMouseUp = (e: any) => {
   // 检查是否为中键释放
   if (e.evt.button === 1) {
@@ -164,12 +202,54 @@ const handleMouseUp = (e: any) => {
     }
   }
 };
+
 const handleMouseLeave = (e: any) => {
   // 鼠标离开画布时停止拖拽
   isDragging.value = false;
   if (konvaViewRef.value) {
     e.target.getStage().container().style.cursor = "default";
   }
+};
+
+// 处理滚轮缩放
+const handleWheel = (e: any) => {
+  e.evt.preventDefault();
+
+  const stageNode = e.target.getStage();
+  const pointer = stageNode.getPointerPosition();
+
+  // 计算当前鼠标在世界坐标系中的位置（考虑Y轴翻转）
+  const worldMousePos = {
+    x: pointer.x / scale.value - origin.x,
+    y: (-pointer.y + stageSize.height) / scale.value - origin.y,
+  };
+
+  // 计算新的缩放值
+  const direction = e.evt.deltaY > 0 ? -1 : 1;
+  const oldScale = scale.value;
+  const newScale = Math.max(
+    minScale,
+    Math.min(maxScale, scale.value + direction * scaleStep)
+  );
+
+  if (newScale === oldScale) return;
+
+  // 更新缩放值
+  scale.value = newScale;
+
+  // 计算缩放后鼠标应该在屏幕上的新位置
+  const newScreenMousePos = {
+    x: (worldMousePos.x + origin.x) * newScale,
+    y: stageSize.height - (worldMousePos.y + origin.y) * newScale,
+  };
+
+  // 计算原点需要调整的偏移量
+  const deltaX = (pointer.x - newScreenMousePos.x) / newScale;
+  const deltaY = -(pointer.y - newScreenMousePos.y) / newScale;
+
+  // 更新原点位置
+  origin.x += deltaX;
+  origin.y += deltaY;
 };
 </script>
 <style scoped>
