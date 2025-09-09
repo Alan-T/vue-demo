@@ -33,6 +33,17 @@
           :startAngle="0"
           :angle="30"
         />
+        <Tooltip
+          :x="0"
+          :y="300"
+          :offsetX="dimLength / 2 + 100"
+          :offsetY="30"
+          :text="`长度: ${dimLength}`"
+          placement="bottom"
+          :rotation="0"
+          :scale="scale"
+          :visible="true"
+        />
       </v-layer>
     </v-stage>
   </div>
@@ -43,6 +54,7 @@ import type { ResizeData } from "@/directives/types";
 
 import DimAngle from "./components/DimAngle.vue";
 import DimLine from "./components/DimLine.vue";
+import Tooltip from "./components/Tooltip·.vue";
 
 const konvaViewRef = ref<HTMLElement | null>(null);
 const stageSize = reactive({
