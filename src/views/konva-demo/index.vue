@@ -88,7 +88,7 @@
 </template>
 <script setup lang="ts">
 import { ref, reactive, computed, onMounted } from "vue";
-import type { ResizeData } from "@/directives/types";
+import type { ResizeData } from "../../directives/types";
 
 import DimAngle from "./components/DimAngle.vue";
 import DimLine from "./components/DimLine.vue";

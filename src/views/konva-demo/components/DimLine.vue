@@ -201,7 +201,7 @@ const handleTextDblClick = (e: any) => {
 };
 
 // 处理编辑区域外点击事件
-const handleDocumentClick = (e: MouseEvent) => {
+const handleDocumentClick = (_: MouseEvent) => {
   // 如果鼠标不在输入框上，则完成编辑
   if (leaveEdit.value) {
     leaveEdit.value = false;

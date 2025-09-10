@@ -20,7 +20,7 @@ export function setupDirectives(
   const {
     include = [],
     exclude = [],
-    debug = process.env.NODE_ENV === "development",
+    debug = import.meta.env.MODE === "development",
   } = options;
 
   Object.keys(directiveModules).forEach((name) => {

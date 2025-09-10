@@ -110,6 +110,9 @@ function setupResizeObserver(
   el._resizeDirective = {
     observer: resizeObserver,
     hasTriggered: config.immediate || false,
+    cleanup: () => {
+      resizeObserver.disconnect();
+    },
     // 移除循环引用的 cleanup 函数
   };
 }
