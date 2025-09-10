@@ -36,6 +36,26 @@ jobs:
       env:
         NODE_ENV: production
         
+     # 关键步骤：处理 SPA History 路由
+    - name: Setup SPA routing for GitHub Pages 🔧
+      run: |
+        # 复制 index.html 为 404.html
+        cp dist/index.html dist/404.html
+        
+        # 创建 .nojekyll 文件
+        touch dist/.nojekyll
+        
+        # 验证文件
+        echo "✅ Build files created:"
+        ls -la dist/
+        
+        if [ ! -f "dist/404.html" ]; then
+          echo "❌ 404.html creation failed!"
+          exit 1
+        fi
+        
+        echo "✅ SPA routing setup completed"
+        
     - name: Upload artifact 📤
       uses: actions/upload-pages-artifact@v3
       with:
@@ -45,3 +65,9 @@ jobs:
       if: github.ref == 'refs/heads/main'
       id: deployment
       uses: actions/deploy-pages@v4
+      
+    - name: Output deployment URL 🌐
+      if: success()
+      run: |
+        echo "🎉 Deployment successful!"
+        echo "🌐 Site URL: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/"
