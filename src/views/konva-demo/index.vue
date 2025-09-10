@@ -225,45 +225,92 @@ const handleMouseLeave = (e: any) => {
   }
 };
 
-// 处理滚轮缩放
+// 处理滚轮事件
 const handleWheel = (e: any) => {
   e.evt.preventDefault();
 
   const stageNode = e.target.getStage();
   const pointer = stageNode.getPointerPosition();
 
-  // 计算当前鼠标在世界坐标系中的位置（考虑Y轴翻转）
-  const worldMousePos = {
-    x: pointer.x / scale.value - origin.x,
-    y: (-pointer.y + stageSize.height) / scale.value - origin.y,
-  };
+  // 按住 Ctrl 键时进行缩放
+  if (e.evt.ctrlKey) {
+    // 计算当前鼠标在世界坐标系中的位置（考虑Y轴翻转）
+    const worldMousePos = {
+      x: pointer.x / scale.value - origin.x,
+      y: (-pointer.y + stageSize.height) / scale.value - origin.y,
+    };
 
-  // 计算新的缩放值
-  const direction = e.evt.deltaY > 0 ? -1 : 1;
-  const oldScale = scale.value;
-  const newScale = Math.max(
-    minScale,
-    Math.min(maxScale, scale.value + direction * scaleStep)
-  );
+    // 计算新的缩放值 - 支持垂直和水平滚动进行缩放
+    let direction = 0;
 
-  if (newScale === oldScale) return;
+    // 优先使用垂直滚动，如果没有垂直滚动则使用水平滚动
+    if (e.evt.deltaY !== 0) {
+      direction = e.evt.deltaY > 0 ? -1 : 1;
+    } else if (e.evt.deltaX !== 0) {
+      direction = e.evt.deltaX > 0 ? -1 : 1;
+    }
 
-  // 更新缩放值
-  scale.value = newScale;
+    if (direction === 0) return;
 
-  // 计算缩放后鼠标应该在屏幕上的新位置
-  const newScreenMousePos = {
-    x: (worldMousePos.x + origin.x) * newScale,
-    y: stageSize.height - (worldMousePos.y + origin.y) * newScale,
-  };
+    const oldScale = scale.value;
+    const newScale = Math.max(
+      minScale,
+      Math.min(maxScale, scale.value + direction * scaleStep)
+    );
 
-  // 计算原点需要调整的偏移量
-  const deltaX = (pointer.x - newScreenMousePos.x) / newScale;
-  const deltaY = -(pointer.y - newScreenMousePos.y) / newScale;
+    if (newScale === oldScale) return;
 
-  // 更新原点位置
-  origin.x += deltaX;
-  origin.y += deltaY;
+    // 更新缩放值
+    scale.value = newScale;
+
+    // 计算缩放后鼠标应该在屏幕上的新位置
+    const newScreenMousePos = {
+      x: (worldMousePos.x + origin.x) * newScale,
+      y: stageSize.height - (worldMousePos.y + origin.y) * newScale,
+    };
+
+    // 计算原点需要调整的偏移量
+    const deltaX = (pointer.x - newScreenMousePos.x) / newScale;
+    const deltaY = -(pointer.y - newScreenMousePos.y) / newScale;
+
+    // 更新原点位置
+    origin.x += deltaX;
+    origin.y += deltaY;
+  } else {
+    // 普通滚轮：移动画布
+    const baseMoveSpeed = 20; // 基础移动速度（像素）
+
+    // 获取滚轮增量
+    const deltaX = e.evt.deltaX; // 水平滚动值
+    const deltaY = e.evt.deltaY; // 垂直滚动值
+
+    // 处理水平滚动（支持触控板水平滑动或鼠标水平滚轮）
+    if (deltaX !== 0) {
+      // 标准化水平滚动速度，限制最大移动距离
+      const normalizedDeltaX = Math.max(
+        -baseMoveSpeed,
+        Math.min(baseMoveSpeed, deltaX)
+      );
+      origin.x += normalizedDeltaX / scale.value;
+    }
+
+    // 处理垂直滚动
+    if (deltaY !== 0) {
+      // 标准化垂直滚动速度
+      const normalizedDeltaY = Math.max(
+        -baseMoveSpeed,
+        Math.min(baseMoveSpeed, deltaY)
+      );
+
+      if (e.evt.shiftKey) {
+        // Shift + 垂直滚轮：水平移动
+        origin.x += normalizedDeltaY / scale.value;
+      } else {
+        // 普通垂直滚轮：垂直移动
+        origin.y += normalizedDeltaY / scale.value;
+      }
+    }
+  }
 };
 </script>
 <style scoped>
