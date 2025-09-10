@@ -1,4 +1,8 @@
-import { createRouter, createWebHistory } from "vue-router";
+import {
+  createRouter,
+  createWebHistory,
+  createWebHashHistory,
+} from "vue-router";
 
 // 路由配置
 const routes = [
@@ -23,7 +27,10 @@ const routes = [
 ];
 
 const router = createRouter({
-  history: createWebHistory(),
+  // hash模式
+  history: createWebHashHistory(),
+  // history模式
+  //history: createWebHistory(),
   routes,
 });
 
