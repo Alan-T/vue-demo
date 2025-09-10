@@ -1,73 +1,52 @@
-name: Deploy to GitHub Pages
+# 将静态内容部署到 GitHub Pages 的简易工作流程
+name: Deploy static content to Pages
 
 on:
+  # 仅在推送到默认分支时运行。
   push:
-    branches: [ main ]
-  workflow_dispatch:
+    # branches: ['main']，暂停部署到 GitHub pages
+    branches: ['main']
 
+  # 这个选项可以使你手动在 Action tab 页面触发工作流
+  workflow_dispatch:      
+
+# 设置 GITHUB_TOKEN 的权限，以允许部署到 GitHub Pages。
 permissions:
   contents: read
   pages: write
   id-token: write
 
+# 允许一个并发的部署
 concurrency:
-  group: "pages"
-  cancel-in-progress: false
+  group: 'pages'
+  cancel-in-progress: true
 
 jobs:
-  build-and-deploy:
+  # 单次部署的工作描述
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
-    
     steps:
-    - name: Checkout 🛎️
-      uses: actions/checkout@v4
-      
-    - name: Setup Node.js 📦
-      uses: actions/setup-node@v4
-      with:
-        node-version: '24'
-        cache: 'npm'
-        
-    - name: Install dependencies 🔧
-      run: npm install
-      
-    - name: Build project 🏗️
-      run: npm run build
-      env:
-        NODE_ENV: production
-        
-     # 关键步骤：处理 SPA History 路由
-    - name: Setup SPA routing for GitHub Pages 🔧
-      run: |
-        # 复制 index.html 为 404.html
-        cp dist/index.html dist/404.html
-        
-        # 创建 .nojekyll 文件
-        touch dist/.nojekyll
-        
-        # 验证文件
-        echo "✅ Build files created:"
-        ls -la dist/
-        
-        if [ ! -f "dist/404.html" ]; then
-          echo "❌ 404.html creation failed!"
-          exit 1
-        fi
-        
-        echo "✅ SPA routing setup completed"
-        
-    - name: Upload artifact 📤
-      uses: actions/upload-pages-artifact@v3
-      with:
-        path: ./dist
-        
-    - name: Deploy to GitHub Pages 🚀
-      if: github.ref == 'refs/heads/main'
-      id: deployment
-      uses: actions/deploy-pages@v4
-      
-    - name: Output deployment URL 🌐
-      if: success()
-      run: |
-        echo "🎉 Deployment successful!"
-        echo "🌐 Site URL: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/"
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Set up Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 24
+          cache: 'npm'
+      - name: Install dependencies
+        run: npm install
+      - name: Build
+        run: npm run build
+      - name: Setup Pages
+        uses: actions/configure-pages@v3
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v1
+        with:
+          # Upload dist repository
+          path: './dist'
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v1
