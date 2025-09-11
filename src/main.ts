@@ -11,18 +11,6 @@ setupDirectives(app, {
   debug: true, // 开发环境显示注册日志
 });
 app.use(router);
-// 处理从 GitHub Pages 404 重定向
-const handleGitHubPagesRedirect = () => {
-  const redirectPath = sessionStorage.getItem("redirectPath");
-  if (redirectPath) {
-    sessionStorage.removeItem("redirectPath");
-    router.replace(redirectPath);
-  }
-};
+
 app.use(VueKonva);
 app.mount("#app");
-
-// 在路由准备好后处理重定向
-router.isReady().then(() => {
-  handleGitHubPagesRedirect();
-});

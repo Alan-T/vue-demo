@@ -1,89 +1,100 @@
 <template>
-  <div class="konva-demo" ref="konvaViewRef" v-resize="handleResize">
-    <!-- 舞台 -->
-    <v-stage
-      :config="stageConfig"
-      @mousemove="handleMouseMove"
-      @mousedown="handleMouseDown"
-      @mouseup="handleMouseUp"
-      @mouseleave="handleMouseLeave"
-      @wheel="handleWheel"
-    >
-      <v-layer>
-        <!-- 鼠标坐标显示 -->
-        <v-text :config="mouseInfoConfig"></v-text>
-        <!-- 原点信息 -->
-        <v-circle :config="originDotConfig" />
-        <!-- 坐标标注 -->
-        <v-text :config="labelConfig" />
-      </v-layer>
-      <v-layer>
-        <!-- 其他图形元素可以放在这里 -->
-        <v-rect
-          :config="{
-            x: 100,
-            y: 300,
-            width: dimLength,
-            height: 200,
-            fill: '#d48806',
-          }"
-        ></v-rect>
-        <v-circle
-          :config="{
-            x: 800,
-            y: 400,
-            radius: circleRadius,
-            fill: '#ff7a45',
-          }"
-        ></v-circle>
-      </v-layer>
-      <v-layer>
-        <DimLine
-          :startX="100"
-          :startY="530"
-          v-model="dimLength"
-          :rotation="0"
-          :offsetY="0"
-          :scale="1 / scale"
-          :editable="true"
-        />
-        <DimAngle
-          :x="400"
-          :y="0"
-          :startAngle="0"
-          :angle="30"
-          :scale="1 / scale"
-        />
-        <DimLine
-          :startX="800"
-          :startY="0"
-          :modelValue="100"
-          :rotation="0"
-          :offsetY="0"
-          :scale="1 / scale"
-        />
-        <Tooltip
-          :x="0"
-          :y="530"
-          :offsetX="dimLength / 2 + 100"
-          :offsetY="30"
-          :text="`长度: ${dimLength}`"
-          placement="bottom"
-          :rotation="0"
-          :scale="1 / scale"
-          :visible="true"
-        />
-        <DimLine
-          :startX="800"
-          :startY="400"
-          v-model="circleRadius"
-          :rotation="0"
-          :offsetY="0"
-          :scale="1 / scale"
-          :editable="true"
-        />
-      </v-layer>
-    </v-stage>
+  <div class="konva-demo-container">
+    <div class="instructions">
+      <p>使用鼠标中键拖拽画布</p>
+      <p>按住 Ctrl 键 + 滚轮缩放画布</p>
+      <p>滚轮或触控板滚动移动画布</p>
+      <p>按住 Shift 键 + 垂直滚轮水平移动画布</p>
+    </div>
+    <div class="konva-demo" ref="konvaViewRef" v-resize="handleResize">
+      <!-- 舞台 -->
+      <v-stage
+        :config="stageConfig"
+        @mousemove="handleMouseMove"
+        @mousedown="handleMouseDown"
+        @mouseup="handleMouseUp"
+        @mouseleave="handleMouseLeave"
+        @wheel="handleWheel"
+      >
+        <v-layer>
+          <!-- 鼠标坐标显示 -->
+          <v-text :config="mouseInfoConfig"></v-text>
+          <!-- 原点信息 -->
+          <v-circle :config="originDotConfig" />
+          <!-- 坐标标注 -->
+          <v-text :config="labelConfig" />
+        </v-layer>
+        <v-layer>
+          <!-- 其他图形元素可以放在这里 -->
+          <v-rect
+            :config="{
+              x: 100,
+              y: 300,
+              width: dimLength,
+              height: 200,
+              fill: '#d48806',
+            }"
+          ></v-rect>
+          <v-circle
+            :config="{
+              x: 800,
+              y: 400,
+              radius: circleRadius,
+              fill: '#ff7a45',
+            }"
+          ></v-circle>
+        </v-layer>
+        <v-layer>
+          <DimLine
+            :startX="100"
+            :startY="530"
+            v-model="dimLength"
+            :rotation="0"
+            :offsetY="0"
+            :scale="1 / scale"
+            :editable="true"
+          />
+          <DimAngle
+            :x="400"
+            :y="0"
+            :startAngle="0"
+            :angle="30"
+            :scale="1 / scale"
+          />
+          <DimLine
+            :startX="800"
+            :startY="0"
+            :modelValue="100"
+            :rotation="0"
+            :offsetY="0"
+            :scale="1 / scale"
+          />
+          <Tooltip
+            :x="0"
+            :y="530"
+            :offsetX="dimLength / 2 + 100"
+            :offsetY="30"
+            :text="`长度: ${dimLength}`"
+            placement="bottom"
+            :rotation="0"
+            :scale="1 / scale"
+            :visible="true"
+          />
+          <DimLine
+            :startX="800"
+            :startY="400"
+            v-model="circleRadius"
+            :rotation="0"
+            :offsetY="0"
+            :scale="1 / scale"
+            :editable="true"
+          />
+        </v-layer>
+      </v-stage>
+    </div>
+    <div class="footer">
+      <p>Konva Demo</p>
+    </div>
   </div>
 </template>
 <script setup lang="ts">
@@ -313,7 +324,27 @@ const handleWheel = (e: any) => {
   }
 };
 </script>
-<style scoped>
+<style scoped lang="scss">
+.konva-demo-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-rows: auto 24px; /* 主体部分和底部留白 */
+  .instructions {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 12px;
+    z-index: 10;
+    background: rgba(255, 255, 255, 0.8);
+    padding: 5px;
+    border-radius: 4px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    pointer-events: auto; /* 确保可以交互 */
+  }
+}
+
 .konva-demo {
   position: relative;
   width: 100%;

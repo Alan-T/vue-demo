@@ -5,10 +5,7 @@ import path from "path";
 // https://vite.dev/config/
 export default defineConfig({
   // GitHub Pages 配置
-  base:
-    process.env.NODE_ENV === "production"
-      ? "/vue-demo/" // 替换为实际的仓库名
-      : "/",
+  base: "/",
   plugins: [vue()],
   resolve: {
     alias: {
