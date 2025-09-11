@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "fast-glob": "^3.3.3",
     "konva": "^10.0.0",
     "vue": "^3.5.18",
     "vue-konva": "^3.2.6",
@@ -21,6 +22,7 @@
     "sass": "^1.92.1",
     "typescript": "~5.8.3",
     "vite": "^7.1.2",
+    "vite-plugin-svg-icons": "^2.0.1",
     "vue-tsc": "^3.0.5"
   }
 }

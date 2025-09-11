@@ -94,6 +94,7 @@
     </div>
     <div class="footer">
       <p>Konva Demo</p>
+      <FullscreenButton :size="20" iconColor="#262626" />
     </div>
   </div>
 </template>
@@ -104,6 +105,7 @@ import type { ResizeData } from "../../directives/types";
 import DimAngle from "./components/DimAngle.vue";
 import DimLine from "./components/DimLine.vue";
 import Tooltip from "./components/Tooltip·.vue";
+import FullscreenButton from "../../components/FullScreen/index.vue";
 
 const konvaViewRef = ref<HTMLElement | null>(null);
 const stageSize = reactive({
@@ -343,13 +345,18 @@ const handleWheel = (e: any) => {
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
     pointer-events: auto; /* 确保可以交互 */
   }
-}
-
-.konva-demo {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  background-color: #f0f0f0;
-  overflow: hidden;
+  .konva-demo {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background-color: #f0f0f0;
+    overflow: hidden;
+  }
+  .footer {
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
 }
 </style>
