@@ -1,6 +1,6 @@
 <template>
   <div class="konva-demo-container">
-    <div class="instructions">
+    <div class="instructions" v-if="showHelpInfo">
       <p>使用鼠标中键拖拽画布</p>
       <p>按住 Ctrl 键 + 滚轮缩放画布</p>
       <p>滚轮或触控板滚动移动画布</p>
@@ -94,7 +94,15 @@
     </div>
     <div class="footer">
       <p>Konva Demo</p>
-      <FullscreenButton :size="20" iconColor="#262626" />
+      <div class="footer-icons">
+        <FullscreenButton :size="20" iconColor="#262626" />
+        <SvgIcon
+          icon="help"
+          :size="20"
+          style="cursor: pointer"
+          @click="showHelpInfo = !showHelpInfo"
+        />
+      </div>
     </div>
   </div>
 </template>
@@ -107,6 +115,7 @@ import DimLine from "./components/DimLine.vue";
 import Tooltip from "./components/Tooltip·.vue";
 import FullscreenButton from "../../components/FullScreen/index.vue";
 
+const showHelpInfo = ref(false);
 const konvaViewRef = ref<HTMLElement | null>(null);
 const stageSize = reactive({
   width: 1000,
@@ -357,6 +366,12 @@ const handleWheel = (e: any) => {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    .footer-icons {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-right: 6px;
+    }
   }
 }
 </style>
