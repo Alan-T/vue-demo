@@ -99,8 +99,16 @@
         <SvgIcon
           icon="help"
           :size="20"
+          title="帮助信息"
           style="cursor: pointer"
           @click="showHelpInfo = !showHelpInfo"
+        />
+        <SvgIcon
+          icon="quit"
+          title="返回首页"
+          :size="20"
+          style="cursor: pointer"
+          @click="router.push('/')"
         />
       </div>
     </div>
@@ -109,11 +117,14 @@
 <script setup lang="ts">
 import { ref, reactive, computed, onMounted } from "vue";
 import type { ResizeData } from "../../directives/types";
+import { useRouter } from "vue-router";
 
 import DimAngle from "./components/DimAngle.vue";
 import DimLine from "./components/DimLine.vue";
 import Tooltip from "./components/Tooltip·.vue";
 import FullscreenButton from "../../components/FullScreen/index.vue";
+
+const router = useRouter();
 
 const showHelpInfo = ref(false);
 const konvaViewRef = ref<HTMLElement | null>(null);

@@ -6,6 +6,7 @@
     :height="size"
     :style="{ color: color }"
   >
+    <title>{{ title }}</title>
     <use :xlink:href="iconName" fill="currentColor"></use>
   </svg>
 </template>
@@ -26,6 +27,10 @@ const props = defineProps({
   iconClass: {
     type: String,
     default: "icon-", //默认值
+  },
+  title: {
+    type: String,
+    default: "",
   },
   // 图标颜色
   color: {
