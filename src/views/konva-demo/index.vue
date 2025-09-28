@@ -89,6 +89,23 @@
             :scale="1 / scale"
             :editable="true"
           />
+          <v-image
+            v-if="vaderImage"
+            :config="{
+              x: 2000,
+              y: 1200,
+              rotation: 180,
+              image: vaderImage,
+              scaleX: 0.5,
+              scaleY: 0.5,
+              cornerRadius: 8,
+              shadowColor: 'black',
+              shadowBlur: 10,
+              shadowOffset: { x: 5, y: -5 },
+              shadowOpacity: 0.6,
+              draggable: true,
+            }"
+          />
         </v-layer>
       </v-stage>
     </div>
@@ -116,6 +133,7 @@
 </template>
 <script setup lang="ts">
 import { ref, reactive, computed, onMounted } from "vue";
+import { useImage } from "vue-konva";
 import type { ResizeData } from "../../directives/types";
 import { useRouter } from "vue-router";
 
@@ -123,7 +141,9 @@ import DimAngle from "./components/DimAngle.vue";
 import DimLine from "./components/DimLine.vue";
 import Tooltip from "./components/Tooltip·.vue";
 import FullscreenButton from "../../components/FullScreen/index.vue";
+import avatar from "../../assets/images/avatar.jpg";
 
+const [vaderImage] = useImage(avatar);
 const router = useRouter();
 
 const showHelpInfo = ref(false);
