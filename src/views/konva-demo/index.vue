@@ -25,6 +25,12 @@
           <v-text :config="labelConfig" />
         </v-layer>
         <v-layer>
+          <!-- 绘制网格线 -->
+          <v-line
+            v-for="(line, index) in gridLines"
+            :key="`grid-${index}`"
+            :config="line"
+          />
           <!-- 其他图形元素可以放在这里 -->
           <v-rect
             :config="{
@@ -142,20 +148,33 @@ import DimLine from "./components/DimLine.vue";
 import Tooltip from "./components/Tooltip·.vue";
 import FullscreenButton from "../../components/FullScreen/index.vue";
 import avatar from "../../assets/images/avatar.jpg";
-
+import { off } from "process";
 const [vaderImage] = useImage(avatar);
 const router = useRouter();
 
 const showHelpInfo = ref(false);
 const konvaViewRef = ref<HTMLElement | null>(null);
 const stageSize = reactive({
-  width: 1000,
-  height: 600,
+  width: 1920,
+  height: 1080,
 });
-const scale = ref(0.5);
+const scale = ref(1);
 const origin = reactive({
-  x: 400,
-  y: 400,
+  x: 200,
+  y: 200,
+});
+// 画布配置
+const configKonva = ref({
+  width: 8000,
+  height: 6000,
+});
+// 网格配置
+const gridConfig = ref({
+  size: 20, // 网格大小
+  color: "#dedede", // 网格颜色
+  strokeWidth: 0.75, // 线宽
+  dash: [3 * scale.value, 3 * scale.value],
+  lineJoin: "round",
 });
 // 添加拖拽相关状态
 const isDragging = ref(false);
@@ -176,6 +195,42 @@ const stageConfig = computed(() => ({
   offsetX: -origin.x,
   offsetY: -origin.y,
 }));
+// 计算网格线
+const gridLines = computed(() => {
+  const lines = [];
+  const { width, height } = configKonva.value;
+  const { size, color, strokeWidth, dash, lineJoin } = gridConfig.value;
+
+  // 垂直线
+  for (let x = 0; x <= width; x += size) {
+    lines.push({
+      points: [x, 0, x, height],
+      offsetY: 3000,
+      offsetX: 4000,
+      stroke: color,
+      strokeWidth: strokeWidth / scale.value, // 根据缩放调整线宽
+      dash: dash,
+      lineJoin: lineJoin,
+      listening: false, // 不响应事件
+    });
+  }
+
+  // 水平线
+  for (let y = 0; y <= height; y += size) {
+    lines.push({
+      points: [0, y, width, y],
+      offsetY: 3000,
+      offsetX: 4000,
+      stroke: color,
+      strokeWidth: strokeWidth / scale.value, // 根据缩放调整线宽
+      dash: dash,
+      lineJoin: lineJoin,
+      listening: false,
+    });
+  }
+
+  return lines;
+});
 const originDotConfig = computed(() => ({
   x: 0,
   y: 0,
@@ -389,7 +444,7 @@ const handleWheel = (e: any) => {
     position: relative;
     width: 100%;
     height: 100%;
-    background-color: #f0f0f0;
+    background-color: #ffffff;
     overflow: hidden;
   }
   .footer {
